@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="XyTableEquipment" Id="{d3cc4623-badc-45b1-9a25-8fd84c674779}" SpecialFunc="None">
+    <Declaration><![CDATA[/// This function block is a container for equipment that is used by this unit.
+/// Equipment is grouped by its kind (actuator, axes, io, ...).
+/// It extends from [ManagedObjectContainer](xref:ZCore.ManagedObjectContainer) such that the parent
+/// (= the unit itself) can be passed to equipment instances.
+FUNCTION_BLOCK XyTableEquipment EXTENDS XyTableContainer
+VAR_INPUT
+  Io : XyTableIo(_parent);
+  Actuator : XyTableActuator(_parent);
+  Axis : XyTableAxis(_parent);
+  Fieldbus : XyTableFieldbus(_parent);
+  Unit : XyTableLinkedUnit(_parent);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="IXyTable" Id="{5cc24f3e-61c5-482a-aad5-731feb80256f}">
+    <Declaration><![CDATA[INTERFACE IXyTable EXTENDS ZApplication.IUnit
+]]></Declaration>
+  </Itf>
+</TcPlcObject>

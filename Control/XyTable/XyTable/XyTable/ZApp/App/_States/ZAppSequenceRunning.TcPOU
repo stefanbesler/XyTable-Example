@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="ZAppSequenceRunning" Id="{89f44c0b-f8f0-4c2c-9beb-68213870f137}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ZAppSequenceRunning EXTENDS ZAppSequence IMPLEMENTS ZCore.ISequence
+VAR
+  _step : ZCore.Step(ZAppStep.RunningBegin, ZAppStep.RunningEnd);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF OnStart(_step)
+THEN
+  // init custom sequence variables here ...
+END_IF
+
+REPEAT
+  LogStep();
+
+  CASE _step.Index OF
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    ZAppStep.RunningBegin:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      ; // implement me
+      
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    ZAppStep.RunningEnd:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      SetBusy(FALSE);
+      
+  ELSE
+    Abort('sequence contains unhandled step');
+  END_CASE
+UNTIL _step.IsNotRepeatable() OR_ELSE NOT Busy END_REPEAT]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

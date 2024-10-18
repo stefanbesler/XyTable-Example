@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ZDataCalibration" Id="{56b74987-0917-4d2b-b8d6-f33ebfa27f57}">
+    <Declaration><![CDATA[TYPE ZDataCalibration :
+STRUCT
+{region "XyTable"}
+{IF NOT (defined (XyTable_disabled))}
+  XyTable : XyTableDataCalibration;
+  {attribute 'ZId' := '934662f7-81a9-4247-b804-76d465c7ec61'}
+{END_IF}
+{endregion}
+{attribute '__ZwPlcApplicationDataCalibrationDeclaration__'} // Do not remove this attribute! It is used for code generation.
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

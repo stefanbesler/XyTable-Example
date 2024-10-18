@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="XyTableActuatorPen" Id="{81a3e87e-8644-49b3-b809-986ff960638c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK XyTableActuatorPen EXTENDS ZEquipment.ActuatorDigitalBiLsPlusMinus]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="DownAsync" Id="{2380fe05-462e-4507-8be1-c99ee40b0ee1}">
+      <Declaration><![CDATA[METHOD PUBLIC DownAsync
+VAR_INPUT
+  startToken : ZCore.IStartToken;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MoveMinusAsync(startToken:=startToken);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsDown" Id="{bc52c344-06af-4872-8b09-d92d912e03ae}">
+      <Declaration><![CDATA[METHOD PUBLIC IsDown : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsDown := IsAtMinus();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsUp" Id="{37129c7a-556e-4e6b-8fbd-543b6ab9c5b3}">
+      <Declaration><![CDATA[METHOD PUBLIC IsUp : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsUp := IsAtPlus();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpAsync" Id="{3c334fc2-0157-45ef-8c81-153bc3ec3ad2}">
+      <Declaration><![CDATA[METHOD PUBLIC UpAsync
+VAR_INPUT
+  startToken : ZCore.IStartToken;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MovePlusAsync(startToken:=startToken);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

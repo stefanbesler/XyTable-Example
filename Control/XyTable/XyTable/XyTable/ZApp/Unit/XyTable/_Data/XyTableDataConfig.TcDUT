@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="XyTableDataConfig" Id="{2d1a4b21-7f2e-405f-aabf-66e05fcec3e6}">
+    <Declaration><![CDATA[/// configuration data that is used during boot to configure the Units equipment
+TYPE XyTableDataConfig :
+STRUCT
+  Simulated : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

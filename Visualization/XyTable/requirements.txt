@@ -1,0 +1,2 @@
+pyads~=3.4.2
+panda3d

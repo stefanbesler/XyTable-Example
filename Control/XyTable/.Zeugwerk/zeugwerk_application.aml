@@ -4,20 +4,20 @@
     <Document DocumentIdentifier="Z.AmlLibs" Version="1.7.0" />
   </AdditionalInformation>
   <SuperiorStandardVersion>AutomationML 2.10</SuperiorStandardVersion>
-  <SourceDocumentInformation OriginName="AutomationML Editor" OriginID="916578CA-FE0D-474E-A4FC-9E1719892369" OriginVersion="5.6.2.0" LastWritingDateTime="2021-11-22T17:41:57.1464048+01:00" OriginVendor="Zeugwerk" OriginVendorURL="https://zeugwerk.at/" OriginRelease="5.6.2.0" OriginProjectTitle="Zeugwerk Framework Aml-Template" OriginProjectID="Z.AmlLibs" />
+  <SourceDocumentInformation OriginName="AutomationML Editor" OriginID="916578CA-FE0D-474E-A4FC-9E1719892369" OriginVersion="5.6.2.0" LastWritingDateTime="2024-05-25T18:28:12.4968914+02:00" OriginVendor="Zeugwerk" OriginVendorURL="https://zeugwerk.at/" OriginRelease="5.6.2.0" OriginProjectTitle="Zeugwerk Framework Aml-Template" OriginProjectID="Z.AmlLibs" />
   <InstanceHierarchy Name="zeugwerk_application">
     <Version>0</Version>
-    <InternalElement Name="ScriblyPlc" ID="d1f4e4df-98ef-42b8-8c80-07f49d0fd6a4" RefBaseSystemUnitPath="ZObjectLib/Common/ZAutomationProject">
+    <InternalElement Name="XyTable" ID="0861e74a-4c75-45d2-af92-fd4be0be71ea" RefBaseSystemUnitPath="ZObjectLib/Common/ZAutomationProject">
       <Attribute Name="ProjectManufacturer" AttributeDataType="xs:string"></Attribute>
       <Attribute Name="ProjectSign" AttributeDataType="xs:string"></Attribute>
       <Attribute Name="ProjectRevision" AttributeDataType="xs:string"></Attribute>
       <Attribute Name="ProjectInformation" AttributeDataType="xs:string"></Attribute>
-      <InternalElement Name="ScriblyPlc" ID="aec296b1-6b88-4edf-a3f6-d59d9fcfa097" RefBaseSystemUnitPath="ZObjectLib/Common/ZPLC">
-        <InternalElement Name="Scribly" ID="f607484c-b594-4144-a307-86b8991e3218" RefBaseSystemUnitPath="ZObjectLib/Unit/ZUnit">
-          <InternalElement Name="Instance" ID="8a51af8c-3043-470f-a0dc-352b48f7ad7a">
-            <InternalElement Name="Scribly" ID="61e5b130-0fef-4d8b-85dd-afb1efcde47c" RefBaseSystemUnitPath="ZObjectLib/Unit/ZUnitInstance">
+      <InternalElement Name="XyTable" ID="4c3f5a98-a00a-45c2-8cb7-51c1d40d646c" RefBaseSystemUnitPath="ZObjectLib/Common/ZPLC">
+        <InternalElement Name="XyTable" ID="58bf1f70-3606-4d15-9092-18e6bfacf7a1" RefBaseSystemUnitPath="ZObjectLib/Unit/ZUnit">
+          <InternalElement Name="Instance" ID="3bc2aae0-1b34-4a7c-a233-938fecaa36d4">
+            <InternalElement Name="XyTable" ID="934662f7-81a9-4247-b804-76d465c7ec61" RefBaseSystemUnitPath="ZObjectLib/Unit/ZUnitInstance">
               <Attribute Name="DisplayName" AttributeDataType="xs:string">
-                <Value>Scribly</Value>
+                <Value>XyTable</Value>
               </Attribute>
               <Attribute Name="RunInSeparateProgram" AttributeDataType="xs:boolean">
                 <Description>Shall the unit run in its own program (task)</Description>
@@ -34,144 +34,8 @@
               <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
             </InternalElement>
           </InternalElement>
-          <InternalElement Name="Equipment" ID="5bfc2cf1-e375-4396-ba98-c572a915a9bf">
-            <InternalElement Name="EthercatSlaveAxisY" ID="671c3bd8-d8b9-4999-8cc8-3de6881aac8b" RefBaseSystemUnitPath="ZObjectLib/Unit/Equipment/ZEquipmentFieldbusDevice">
-              <Attribute Name="DisplayName" AttributeDataType="xs:string">
-                <Value>EthercatSlaveAxisY</Value>
-              </Attribute>
-              <Attribute Name="Logger" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
-                <Value>ZObjectLib/Common/Logger</Value>
-              </Attribute>
-              <Attribute Name="Simulated" AttributeDataType="xs:string">
-                <Value>Indeterminate</Value>
-              </Attribute>
-              <Attribute Name="SetLogger" AttributeDataType="xs:boolean">
-                <Description>Shall the Unit Logger be added to the I/O.</Description>
-                <DefaultValue>true</DefaultValue>
-                <Value>True</Value>
-              </Attribute>
-              <Attribute Name="Type" AttributeDataType="xs:string">
-                <Description>PLC Type of the I/O</Description>
-                <Value>EthercatSlave</Value>
-              </Attribute>
-              <Attribute Name="EthercatSlave" AttributeDataType="xs:string">
-                <Attribute Name="InitialState" AttributeDataType="xs:string">
-                  <Description>Ethercat Slave State which is set during boot (hex format 16#0000)</Description>
-                  <Value>Undefined</Value>
-                </Attribute>
-              </Attribute>
-              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
-              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZEquipment" />
-            </InternalElement>
-            <InternalElement Name="EthercatSlaveAxisX" ID="016ba96f-815c-4e4c-831d-2c0d382ce377" RefBaseSystemUnitPath="ZObjectLib/Unit/Equipment/ZEquipmentFieldbusDevice">
-              <Attribute Name="DisplayName" AttributeDataType="xs:string">
-                <Value>EthercatSlaveAxisX</Value>
-              </Attribute>
-              <Attribute Name="Logger" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
-                <Value>ZObjectLib/Common/Logger</Value>
-              </Attribute>
-              <Attribute Name="Simulated" AttributeDataType="xs:string">
-                <Value>Indeterminate</Value>
-              </Attribute>
-              <Attribute Name="SetLogger" AttributeDataType="xs:boolean">
-                <Description>Shall the Unit Logger be added to the I/O.</Description>
-                <DefaultValue>true</DefaultValue>
-                <Value>True</Value>
-              </Attribute>
-              <Attribute Name="Type" AttributeDataType="xs:string">
-                <Description>PLC Type of the I/O</Description>
-                <Value>EthercatSlave</Value>
-              </Attribute>
-              <Attribute Name="EthercatSlave" AttributeDataType="xs:string">
-                <Attribute Name="InitialState" AttributeDataType="xs:string">
-                  <Description>Ethercat Slave State which is set during boot (hex format 16#0000)</Description>
-                  <Value>Undefined</Value>
-                </Attribute>
-              </Attribute>
-              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
-              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZEquipment" />
-            </InternalElement>
-            <InternalElement Name="AxisY" ID="787e5d02-9d93-4b03-8235-ee23b1a291ad" RefBaseSystemUnitPath="ZObjectLib/Unit/Equipment/ZEquipmentAxis">
-              <Attribute Name="DisplayName" AttributeDataType="xs:string">
-                <Value>AxisY</Value>
-              </Attribute>
-              <Attribute Name="Logger" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
-                <Value>ZObjectLib/Common/Logger</Value>
-              </Attribute>
-              <Attribute Name="Simulated" AttributeDataType="xs:string">
-                <Value>Indeterminate</Value>
-              </Attribute>
-              <Attribute Name="SetLogger" AttributeDataType="xs:boolean">
-                <Description>Shall the Unit Logger be added to the I/O.</Description>
-                <DefaultValue>true</DefaultValue>
-              </Attribute>
-              <Attribute Name="Type" AttributeDataType="xs:string">
-                <Description>PLC Type of the Axis</Description>
-                <Value>AxisPlcOpenMc</Value>
-              </Attribute>
-              <Attribute Name="AxisTest" AttributeDataType="xs:boolean">
-                <Description>Should the Axis be added to the axisbridge for Axis Test purposes on an HMI</Description>
-                <DefaultValue>false</DefaultValue>
-                <Value>True</Value>
-              </Attribute>
-              <Attribute Name="AxisPlcOpenMc" AttributeDataType="xs:string" />
-              <Attribute Name="AxisStepperEL7031" AttributeDataType="xs:string">
-                <Attribute Name="EthercatSlave" AttributeDataType="" RefAttributeType="">
-                  <Description>Type description of the coresponding mirror object 'AxisStepperEL7031.EthercatSlave'</Description>
-                  <Value></Value>
-                  <Attribute Name="RefBaseClass" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
-                    <Description>Objekttype als CAEX Pfad, welcher als Interface auf ein anderes Objekt in Form eines Mirrorobjektes für die Verwendung initialisiert werden kann.</Description>
-                    <Value>ZObjectLib/Unit/Equipment/ZEquipmentFieldbusDevice</Value>
-                  </Attribute>
-                  <Attribute Name="Type" AttributeDataType="xs:string">
-                    <Value>EthercatSlave</Value>
-                  </Attribute>
-                </Attribute>
-              </Attribute>
-              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
-              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZEquipment" />
-            </InternalElement>
-            <InternalElement Name="AxisX" ID="a9303431-20fb-4f90-9643-84006bcd2555" RefBaseSystemUnitPath="ZObjectLib/Unit/Equipment/ZEquipmentAxis">
-              <Attribute Name="DisplayName" AttributeDataType="xs:string">
-                <Value>AxisX</Value>
-              </Attribute>
-              <Attribute Name="Logger" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
-                <Value>ZObjectLib/Common/Logger</Value>
-              </Attribute>
-              <Attribute Name="Simulated" AttributeDataType="xs:string">
-                <Value>Indeterminate</Value>
-              </Attribute>
-              <Attribute Name="SetLogger" AttributeDataType="xs:boolean">
-                <Description>Shall the Unit Logger be added to the I/O.</Description>
-                <DefaultValue>true</DefaultValue>
-              </Attribute>
-              <Attribute Name="Type" AttributeDataType="xs:string">
-                <Description>PLC Type of the Axis</Description>
-                <Value>AxisPlcOpenMc</Value>
-              </Attribute>
-              <Attribute Name="AxisTest" AttributeDataType="xs:boolean">
-                <Description>Should the Axis be added to the axisbridge for Axis Test purposes on an HMI</Description>
-                <DefaultValue>false</DefaultValue>
-                <Value>True</Value>
-              </Attribute>
-              <Attribute Name="AxisPlcOpenMc" AttributeDataType="xs:string" />
-              <Attribute Name="AxisStepperEL7031" AttributeDataType="xs:string">
-                <Attribute Name="EthercatSlave" AttributeDataType="" RefAttributeType="">
-                  <Description>Type description of the coresponding mirror object 'AxisStepperEL7031.EthercatSlave'</Description>
-                  <Value></Value>
-                  <Attribute Name="RefBaseClass" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
-                    <Description>Objekttype als CAEX Pfad, welcher als Interface auf ein anderes Objekt in Form eines Mirrorobjektes für die Verwendung initialisiert werden kann.</Description>
-                    <Value>ZObjectLib/Unit/Equipment/ZEquipmentFieldbusDevice</Value>
-                  </Attribute>
-                  <Attribute Name="Type" AttributeDataType="xs:string">
-                    <Value>EthercatSlave</Value>
-                  </Attribute>
-                </Attribute>
-              </Attribute>
-              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
-              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZEquipment" />
-            </InternalElement>
-            <InternalElement Name="Pen" ID="715ceec0-4c65-4cb8-884b-f54d8c494ea5" RefBaseSystemUnitPath="ZObjectLib/Unit/Equipment/ZEquipmentActuator">
+          <InternalElement Name="Equipment" ID="814dca09-b754-47e7-be52-68aeb3109865">
+            <InternalElement Name="Pen" ID="a2af64cd-ae98-4060-afd2-2cfacfac101c" RefBaseSystemUnitPath="ZObjectLib/Unit/Equipment/ZEquipmentActuator">
               <Attribute Name="DisplayName" AttributeDataType="xs:string">
                 <Value>Pen</Value>
               </Attribute>
@@ -278,7 +142,88 @@
               <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
               <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZEquipment" />
             </InternalElement>
+            <InternalElement Name="AxisY" ID="5efb0243-1556-4e56-aeca-16ed0d08aedd" RefBaseSystemUnitPath="ZObjectLib/Unit/Equipment/ZEquipmentAxis">
+              <Attribute Name="DisplayName" AttributeDataType="xs:string">
+                <Value>AxisY</Value>
+              </Attribute>
+              <Attribute Name="Logger" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
+                <Value>ZObjectLib/Common/Logger</Value>
+              </Attribute>
+              <Attribute Name="Simulated" AttributeDataType="xs:string">
+                <Value>Indeterminate</Value>
+              </Attribute>
+              <Attribute Name="SetLogger" AttributeDataType="xs:boolean">
+                <Description>Shall the Unit Logger be added to the I/O.</Description>
+                <DefaultValue>true</DefaultValue>
+              </Attribute>
+              <Attribute Name="Type" AttributeDataType="xs:string">
+                <Description>PLC Type of the Axis</Description>
+                <Value>AxisPlcOpenMc</Value>
+              </Attribute>
+              <Attribute Name="AxisTest" AttributeDataType="xs:boolean">
+                <Description>Should the Axis be added to the axisbridge for Axis Test purposes on an HMI</Description>
+                <DefaultValue>false</DefaultValue>
+                <Value>True</Value>
+              </Attribute>
+              <Attribute Name="AxisPlcOpenMc" AttributeDataType="xs:string" />
+              <Attribute Name="AxisStepperEL7031" AttributeDataType="xs:string">
+                <Attribute Name="EthercatSlave" AttributeDataType="" RefAttributeType="">
+                  <Description>Type description of the coresponding mirror object 'AxisStepperEL7031.EthercatSlave'</Description>
+                  <Value></Value>
+                  <Attribute Name="RefBaseClass" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
+                    <Description>Objekttype als CAEX Pfad, welcher als Interface auf ein anderes Objekt in Form eines Mirrorobjektes für die Verwendung initialisiert werden kann.</Description>
+                    <Value>ZObjectLib/Unit/Equipment/ZEquipmentFieldbusDevice</Value>
+                  </Attribute>
+                  <Attribute Name="Type" AttributeDataType="xs:string">
+                    <Value>EthercatSlave</Value>
+                  </Attribute>
+                </Attribute>
+              </Attribute>
+              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
+              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZEquipment" />
+            </InternalElement>
+            <InternalElement Name="AxisX" ID="fcb4f634-5402-488a-b9f2-f463d25a2352" RefBaseSystemUnitPath="ZObjectLib/Unit/Equipment/ZEquipmentAxis">
+              <Attribute Name="DisplayName" AttributeDataType="xs:string">
+                <Value>AxisX</Value>
+              </Attribute>
+              <Attribute Name="Logger" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
+                <Value>ZObjectLib/Common/Logger</Value>
+              </Attribute>
+              <Attribute Name="Simulated" AttributeDataType="xs:string">
+                <Value>Indeterminate</Value>
+              </Attribute>
+              <Attribute Name="SetLogger" AttributeDataType="xs:boolean">
+                <Description>Shall the Unit Logger be added to the I/O.</Description>
+                <DefaultValue>true</DefaultValue>
+              </Attribute>
+              <Attribute Name="Type" AttributeDataType="xs:string">
+                <Description>PLC Type of the Axis</Description>
+                <Value>AxisPlcOpenMc</Value>
+              </Attribute>
+              <Attribute Name="AxisTest" AttributeDataType="xs:boolean">
+                <Description>Should the Axis be added to the axisbridge for Axis Test purposes on an HMI</Description>
+                <DefaultValue>false</DefaultValue>
+                <Value>True</Value>
+              </Attribute>
+              <Attribute Name="AxisPlcOpenMc" AttributeDataType="xs:string" />
+              <Attribute Name="AxisStepperEL7031" AttributeDataType="xs:string">
+                <Attribute Name="EthercatSlave" AttributeDataType="" RefAttributeType="">
+                  <Description>Type description of the coresponding mirror object 'AxisStepperEL7031.EthercatSlave'</Description>
+                  <Value></Value>
+                  <Attribute Name="RefBaseClass" AttributeDataType="xs:string" RefAttributeType="ZAttributeTypeLib/ZObjectRelation">
+                    <Description>Objekttype als CAEX Pfad, welcher als Interface auf ein anderes Objekt in Form eines Mirrorobjektes für die Verwendung initialisiert werden kann.</Description>
+                    <Value>ZObjectLib/Unit/Equipment/ZEquipmentFieldbusDevice</Value>
+                  </Attribute>
+                  <Attribute Name="Type" AttributeDataType="xs:string">
+                    <Value>EthercatSlave</Value>
+                  </Attribute>
+                </Attribute>
+              </Attribute>
+              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZObject" />
+              <RoleRequirements RefBaseRoleClassPath="ZRoleClassLib/ZEquipment" />
+            </InternalElement>
           </InternalElement>
+          <InternalElement Name="Logic" ID="24adae13-7947-4b71-b2ae-88ac531aace7" />
           <RoleRequirements RefBaseRoleClassPath="AutomationMLExtendedRoleClassLib/Unit" />
         </InternalElement>
         <RoleRequirements RefBaseRoleClassPath="AutomationMLCSRoleClassLib/ControlEquipment/Controller/PLC" />
@@ -286,43 +231,6 @@
       <RoleRequirements RefBaseRoleClassPath="AutomationProjectConfigurationRoleClassLib/AutomationProject" />
     </InternalElement>
   </InstanceHierarchy>
-  <InterfaceClassLib Name="AutomationMLInterfaceClassLib">
-    <Description>Standard Automation Markup Language Interface Class Library</Description>
-    <Version>2.2.5</Version>
-    <InterfaceClass Name="AutomationMLBaseInterface">
-      <InterfaceClass Name="Order" RefBaseClassPath="AutomationMLBaseInterface">
-        <Attribute Name="Direction" AttributeDataType="xs:string" RefAttributeType="AutomationMLBaseAttributeTypeLib/Direction" />
-      </InterfaceClass>
-      <InterfaceClass Name="Port" RefBaseClassPath="AutomationMLBaseInterface">
-        <Attribute Name="Direction" AttributeDataType="xs:string" RefAttributeType="AutomationMLBaseAttributeTypeLib/Direction">
-          <Constraint Name="AllowedValues">
-            <NominalScaledType>
-              <RequiredValue>In</RequiredValue>
-              <RequiredValue>Out</RequiredValue>
-              <RequiredValue>InOut</RequiredValue>
-            </NominalScaledType>
-          </Constraint>
-        </Attribute>
-        <Attribute Name="Cardinality" RefAttributeType="AutomationMLBaseAttributeTypeLib/Cardinality">
-          <Attribute Name="MinOccur" AttributeDataType="xs:unsignedInt" />
-          <Attribute Name="MaxOccur" AttributeDataType="xs:unsignedInt" />
-        </Attribute>
-        <Attribute Name="Category" AttributeDataType="xs:string" RefAttributeType="AutomationMLBaseAttributeTypeLib/Category" />
-      </InterfaceClass>
-      <InterfaceClass Name="PPRConnector" RefBaseClassPath="AutomationMLBaseInterface" />
-      <InterfaceClass Name="ExternalDataConnector" RefBaseClassPath="AutomationMLBaseInterface">
-        <Attribute Name="refURI" AttributeDataType="xs:anyURI" RefAttributeType="AutomationMLBaseAttributeTypeLib/refURI" />
-        <InterfaceClass Name="COLLADAInterface" RefBaseClassPath="ExternalDataConnector" />
-        <InterfaceClass Name="PLCopenXMLInterface" RefBaseClassPath="ExternalDataConnector" />
-        <InterfaceClass Name="ExternalDataReference" RefBaseClassPath="ExternalDataConnector">
-          <Attribute Name="MIMEType" AttributeDataType="xs:string" RefAttributeType="AutomationMLBaseAttributeTypeLib/MIMEType" />
-        </InterfaceClass>
-      </InterfaceClass>
-      <InterfaceClass Name="Communication" RefBaseClassPath="AutomationMLBaseInterface">
-        <InterfaceClass Name="SignalInterface" RefBaseClassPath="Communication" />
-      </InterfaceClass>
-    </InterfaceClass>
-  </InterfaceClassLib>
   <InterfaceClassLib Name="CommunicationInterfaceClassLib">
     <Description>AutomationML Communication Interface Class Library</Description>
     <Version>1.0.0</Version>
@@ -333,7 +241,7 @@
   <InterfaceClassLib Name="AutomationProjectConfigurationInterfaceClassLib">
     <Description>Automation Markup Language Automation Project Configuration InterfaceClass Library</Description>
     <Version>1.2.0</Version>
-    <InterfaceClass Name="Tag" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/ExternalDataConnector/PLCopenXMLInterface/VariableInterface">
+    <InterfaceClass Name="Tag">
       <Attribute Name="DataType" AttributeDataType="xs:string">
         <Attribute Name="Customized" AttributeDataType="xs:boolean">
           <DefaultValue>false</DefaultValue>
@@ -354,11 +262,104 @@
     </InterfaceClass>
     <InterfaceClass Name="ModuleAssignment" RefBaseClassPath="CommunicationInterfaceClassLib/LogicalEndPoint" />
   </InterfaceClassLib>
-  <RoleClassLib Name="ZRoleClassLib">
+  <InterfaceClassLib Name="AutomationMLInterfaceClassLib">
+    <Description>Standard Automation Markup Language Interface Class Library - Part 1 Content extended with Part 3 Content</Description>
+    <Version>2.2.1</Version>
+    <InterfaceClass Name="AutomationMLBaseInterface">
+      <InterfaceClass Name="Order" RefBaseClassPath="AutomationMLBaseInterface">
+        <Attribute Name="Direction" AttributeDataType="xs:string" />
+      </InterfaceClass>
+      <InterfaceClass Name="PortConnector" RefBaseClassPath="AutomationMLBaseInterface" />
+      <InterfaceClass Name="InterlockingConnector" RefBaseClassPath="AutomationMLBaseInterface" />
+      <InterfaceClass Name="PPRConnector" RefBaseClassPath="AutomationMLBaseInterface" />
+      <InterfaceClass Name="ExternalDataConnector" RefBaseClassPath="AutomationMLBaseInterface">
+        <Attribute Name="refURI" AttributeDataType="xs:anyURI" />
+        <InterfaceClass Name="COLLADAInterface" RefBaseClassPath="ExternalDataConnector">
+          <Attribute Name="refType" AttributeDataType="xs:string" />
+          <Attribute Name="target" AttributeDataType="xs:token" />
+        </InterfaceClass>
+        <InterfaceClass Name="PLCopenXMLInterface" RefBaseClassPath="ExternalDataConnector" />
+      </InterfaceClass>
+      <InterfaceClass Name="Communication" RefBaseClassPath="AutomationMLBaseInterface">
+        <InterfaceClass Name="SignalInterface" RefBaseClassPath="Communication" />
+      </InterfaceClass>
+      <InterfaceClass Name="AttachmentInterface" RefBaseClassPath="AutomationMLBaseInterface" />
+    </InterfaceClass>
+  </InterfaceClassLib>
+  <InterfaceClassLib Name="AutomationMLLogicInterfaceClassLib">
+    <Description>AutomationMLLogicInterfaceClassLib specifies all logic related interface classes for referencing AML logic XML documents.</Description>
     <Version>1.0.0</Version>
-    <RoleClass Name="ZObject" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole" />
-    <RoleClass Name="ZEquipment" RefBaseClassPath="AutomationMLCSRoleClassLib/ControlEquipment" />
-    <RoleClass Name="ZLogic" RefBaseClassPath="AutomationMLLogicRoleClassLib/LogicModelObject" />
+    <InterfaceClass Name="LogicModelInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/ExternalDataConnector" />
+    <InterfaceClass Name="SequencingLogicModelInterface" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/LogicModelInterface" />
+    <InterfaceClass Name="BehaviourLogicModelInterface" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/LogicModelInterface" />
+    <InterfaceClass Name="InterlockingLogicModelInterface" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/LogicModelInterface" />
+    <InterfaceClass Name="LogicModelElementInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/ExternalDataConnector" />
+    <InterfaceClass Name="VariableInterface" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/LogicModelElementInterface">
+      <Attribute Name="Direction" AttributeDataType="xs:string" />
+    </InterfaceClass>
+    <InterfaceClass Name="InterlockingVariableInterface" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/VariableInterface">
+      <Attribute Name="SafeConditionEquals" AttributeDataType="xs:boolean" />
+    </InterfaceClass>
+  </InterfaceClassLib>
+  <InterfaceClassLib Name="AutomationMLPLCopenXMLInterfaceClassLib">
+    <Description>AutomationMLPLCopenXMLInterfaceClassLib specifies the logic related interface class for referencing IEC 61131-10 documents</Description>
+    <Version>1.0.0</Version>
+    <InterfaceClass Name="VariableInterface" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/ExternalDataConnector/PLCopenXMLInterface" />
+  </InterfaceClassLib>
+  <RoleClassLib Name="AutomationMLBaseRoleClassLib">
+    <Description>Automation Markup Language base role class library</Description>
+    <Version>2.2.5</Version>
+    <RoleClass Name="AutomationMLBaseRole">
+      <RoleClass Name="Group" RefBaseClassPath="AutomationMLBaseRole">
+        <Attribute Name="AssociatedFacet" AttributeDataType="xs:string" RefAttributeType="AutomationMLBaseAttributeTypeLib/AssociatedFacet" />
+      </RoleClass>
+      <RoleClass Name="Facet" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Resource" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Product" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Process" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Structure" RefBaseClassPath="AutomationMLBaseRole">
+        <RoleClass Name="ProductStructure" RefBaseClassPath="Structure" />
+        <RoleClass Name="ProcessStructure" RefBaseClassPath="Structure" />
+        <RoleClass Name="ResourceStructure" RefBaseClassPath="Structure" />
+      </RoleClass>
+      <RoleClass Name="ExternalData" RefBaseClassPath="AutomationMLBaseRole" />
+    </RoleClass>
+  </RoleClassLib>
+  <RoleClassLib Name="AutomationMLCSRoleClassLib">
+    <Description>Automation Markup Language Control Industry Role Class Library</Description>
+    <Version>2.3.0</Version>
+    <RoleClass Name="ControlEquipment" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Resource">
+      <RoleClass Name="Communication" RefBaseClassPath="ControlEquipment" />
+      <RoleClass Name="ControlHardware" RefBaseClassPath="ControlEquipment">
+        <RoleClass Name="PC" RefBaseClassPath="ControlHardware" />
+        <RoleClass Name="IPC" RefBaseClassPath="ControlHardware" />
+        <RoleClass Name="EmbeddedDevice" RefBaseClassPath="ControlHardware" />
+        <RoleClass Name="Handheld" RefBaseClassPath="ControlHardware" />
+      </RoleClass>
+      <RoleClass Name="Sensor" RefBaseClassPath="ControlEquipment" />
+      <RoleClass Name="Actuator" RefBaseClassPath="ControlEquipment" />
+      <RoleClass Name="Controller" RefBaseClassPath="ControlEquipment">
+        <RoleClass Name="PLC" RefBaseClassPath="Controller" />
+        <RoleClass Name="NC" RefBaseClassPath="Controller" />
+        <RoleClass Name="RC" RefBaseClassPath="Controller" />
+        <RoleClass Name="PAC" RefBaseClassPath="Controller" />
+      </RoleClass>
+    </RoleClass>
+  </RoleClassLib>
+  <RoleClassLib Name="AutomationMLDMIRoleClassLib">
+    <Description>Automation Markup Language  Discrete Manufacturing Industry Role Class Library</Description>
+    <Version>2.4.0</Version>
+    <RoleClass Name="DiscManufacturingEquipment" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Resource">
+      <RoleClass Name="Transport" RefBaseClassPath="DiscManufacturingEquipment" />
+      <RoleClass Name="Storage" RefBaseClassPath="DiscManufacturingEquipment" />
+      <RoleClass Name="Fixture" RefBaseClassPath="DiscManufacturingEquipment" />
+      <RoleClass Name="Gate" RefBaseClassPath="DiscManufacturingEquipment" />
+      <RoleClass Name="Robot" RefBaseClassPath="DiscManufacturingEquipment" />
+      <RoleClass Name="Tool" RefBaseClassPath="DiscManufacturingEquipment" />
+      <RoleClass Name="Carrier" RefBaseClassPath="DiscManufacturingEquipment" />
+      <RoleClass Name="Machine" RefBaseClassPath="DiscManufacturingEquipment" />
+      <RoleClass Name="StaticObject" RefBaseClassPath="DiscManufacturingEquipment" />
+    </RoleClass>
   </RoleClassLib>
   <RoleClassLib Name="AutomationMLExtendedRoleClassLib">
     <Version>2.7.0</Version>
@@ -405,60 +406,11 @@
     <RoleClass Name="Loader" RefBaseClassPath="AutomationMLDMIRoleClassLib/DiscManufacturingEquipment/Storage" />
     <RoleClass Name="Unloader" RefBaseClassPath="AutomationMLDMIRoleClassLib/DiscManufacturingEquipment/Storage" />
   </RoleClassLib>
-  <RoleClassLib Name="AutomationMLDMIRoleClassLib">
-    <Description>Automation Markup Language  Discrete Manufacturing Industry Role Class Library</Description>
-    <Version>2.4.0</Version>
-    <RoleClass Name="DiscManufacturingEquipment" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Resource">
-      <RoleClass Name="Transport" RefBaseClassPath="DiscManufacturingEquipment" />
-      <RoleClass Name="Storage" RefBaseClassPath="DiscManufacturingEquipment" />
-      <RoleClass Name="Fixture" RefBaseClassPath="DiscManufacturingEquipment" />
-      <RoleClass Name="Gate" RefBaseClassPath="DiscManufacturingEquipment" />
-      <RoleClass Name="Robot" RefBaseClassPath="DiscManufacturingEquipment" />
-      <RoleClass Name="Tool" RefBaseClassPath="DiscManufacturingEquipment" />
-      <RoleClass Name="Carrier" RefBaseClassPath="DiscManufacturingEquipment" />
-      <RoleClass Name="Machine" RefBaseClassPath="DiscManufacturingEquipment" />
-      <RoleClass Name="StaticObject" RefBaseClassPath="DiscManufacturingEquipment" />
-    </RoleClass>
-  </RoleClassLib>
-  <RoleClassLib Name="AutomationMLCSRoleClassLib">
-    <Description>Automation Markup Language Control Industry Role Class Library</Description>
-    <Version>2.3.0</Version>
-    <RoleClass Name="ControlEquipment" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Resource">
-      <RoleClass Name="Communication" RefBaseClassPath="ControlEquipment" />
-      <RoleClass Name="ControlHardware" RefBaseClassPath="ControlEquipment">
-        <RoleClass Name="PC" RefBaseClassPath="ControlHardware" />
-        <RoleClass Name="IPC" RefBaseClassPath="ControlHardware" />
-        <RoleClass Name="EmbeddedDevice" RefBaseClassPath="ControlHardware" />
-        <RoleClass Name="Handheld" RefBaseClassPath="ControlHardware" />
-      </RoleClass>
-      <RoleClass Name="Sensor" RefBaseClassPath="ControlEquipment" />
-      <RoleClass Name="Actuator" RefBaseClassPath="ControlEquipment" />
-      <RoleClass Name="Controller" RefBaseClassPath="ControlEquipment">
-        <RoleClass Name="PLC" RefBaseClassPath="Controller" />
-        <RoleClass Name="NC" RefBaseClassPath="Controller" />
-        <RoleClass Name="RC" RefBaseClassPath="Controller" />
-        <RoleClass Name="PAC" RefBaseClassPath="Controller" />
-      </RoleClass>
-    </RoleClass>
-  </RoleClassLib>
-  <RoleClassLib Name="AutomationMLBaseRoleClassLib">
-    <Description>Automation Markup Language base role class library</Description>
-    <Version>2.2.5</Version>
-    <RoleClass Name="AutomationMLBaseRole">
-      <RoleClass Name="Group" RefBaseClassPath="AutomationMLBaseRole">
-        <Attribute Name="AssociatedFacet" AttributeDataType="xs:string" RefAttributeType="AutomationMLBaseAttributeTypeLib/AssociatedFacet" />
-      </RoleClass>
-      <RoleClass Name="Facet" RefBaseClassPath="AutomationMLBaseRole" />
-      <RoleClass Name="Resource" RefBaseClassPath="AutomationMLBaseRole" />
-      <RoleClass Name="Product" RefBaseClassPath="AutomationMLBaseRole" />
-      <RoleClass Name="Process" RefBaseClassPath="AutomationMLBaseRole" />
-      <RoleClass Name="Structure" RefBaseClassPath="AutomationMLBaseRole">
-        <RoleClass Name="ProductStructure" RefBaseClassPath="Structure" />
-        <RoleClass Name="ProcessStructure" RefBaseClassPath="Structure" />
-        <RoleClass Name="ResourceStructure" RefBaseClassPath="Structure" />
-      </RoleClass>
-      <RoleClass Name="ExternalData" RefBaseClassPath="AutomationMLBaseRole" />
-    </RoleClass>
+  <RoleClassLib Name="ZRoleClassLib">
+    <Version>1.0.0</Version>
+    <RoleClass Name="ZObject" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole" />
+    <RoleClass Name="ZEquipment" RefBaseClassPath="AutomationMLCSRoleClassLib/ControlEquipment" />
+    <RoleClass Name="ZLogic" RefBaseClassPath="AutomationMLLogicRoleClassLib/LogicModelObject" />
   </RoleClassLib>
   <RoleClassLib Name="CommunicationRoleClassLib">
     <Description>AutomationML Communication Role Class Library</Description>
@@ -589,12 +541,64 @@
     <RoleClass Name="NodeBusExtension" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole" />
     <RoleClass Name="CommunicationInterfaceBusExtension" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole" />
   </RoleClassLib>
-  <AttributeTypeLib Name="ZAttributeTypeLib">
+  <RoleClassLib Name="AutomationMLBaseRoleClassLib">
+    <Description>Automation Markup Language Base Role class Library - Part 1 Content extended with Part 3 Content</Description>
+    <Version>2.2.1</Version>
+    <RoleClass Name="AutomationMLBaseRole">
+      <RoleClass Name="Group" RefBaseClassPath="AutomationMLBaseRole">
+        <Attribute Name="AssociatedFacet" AttributeDataType="xs:string" />
+      </RoleClass>
+      <RoleClass Name="Facet" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Port" RefBaseClassPath="AutomationMLBaseRole">
+        <Attribute Name="Direction" AttributeDataType="xs:string" />
+        <Attribute Name="Cardinality">
+          <Attribute Name="MinOccur" AttributeDataType="xs:unsignedInt" />
+          <Attribute Name="MaxOccur" AttributeDataType="xs:unsignedInt" />
+        </Attribute>
+        <Attribute Name="Category" AttributeDataType="xs:string" />
+        <ExternalInterface Name="ConnectionPoint" ID="9942bd9c-c19d-44e4-a197-11b9edf264e7" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/PortConnector" />
+      </RoleClass>
+      <RoleClass Name="Resource" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Product" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Process" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Structure" RefBaseClassPath="AutomationMLBaseRole">
+        <RoleClass Name="ProductStructure" RefBaseClassPath="Structure" />
+        <RoleClass Name="ProcessStructure" RefBaseClassPath="Structure" />
+        <RoleClass Name="ResourceStructure" RefBaseClassPath="Structure" />
+      </RoleClass>
+      <RoleClass Name="PropertySet" RefBaseClassPath="AutomationMLBaseRole" />
+      <RoleClass Name="Frame" RefBaseClassPath="AutomationMLBaseRole" />
+    </RoleClass>
+  </RoleClassLib>
+  <RoleClassLib Name="AutomationMLLogicRoleClassLib">
+    <Description>AutomationMLLogicRoleClassLib specifies all logic related role classes.</Description>
     <Version>1.0.0</Version>
-    <AttributeType Name="ZObjectRelation" AttributeDataType="xs:string">
-      <Description>Objekttype als CAEX Pfad, welcher als Interface auf ein anderes Objekt in Form eines Mirrorobjektes für die Verwendung initialisiert werden kann.</Description>
-    </AttributeType>
-  </AttributeTypeLib>
+    <RoleClass Name="InterlockingTargetGroup" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Group">
+      <ExternalInterface Name="ConnectionInterlockingSourceGroup" ID="1d3bfa87-5538-40e2-b36a-6b31c76208db" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/InterlockingConnector" />
+      <ExternalInterface Name="ReferenceInterlockingLogicModel" ID="b1fd5920-a553-4e68-b571-c672bf00592a" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/InterlockingLogicModelInterface">
+        <Attribute Name="refURI" AttributeDataType="xs:anyURI" />
+      </ExternalInterface>
+    </RoleClass>
+    <RoleClass Name="InterlockingSourceGroup" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole/Group">
+      <ExternalInterface Name="ConnectionInterlockingTargetGroup" ID="3cc169e6-1e34-4d50-907f-df361c9a6d03" RefBaseClassPath="AutomationMLInterfaceClassLib/AutomationMLBaseInterface/InterlockingConnector" />
+      <ExternalInterface Name="ReferenceInterlockingLogicModel" ID="59fcfe8e-7531-4f35-9b13-bd1eb9fecc88" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/InterlockingLogicModelInterface">
+        <Attribute Name="refURI" AttributeDataType="xs:anyURI" />
+      </ExternalInterface>
+      <ExternalInterface Name="ReferenceInterlockingVariable" ID="09546c38-cca7-4eec-85b1-a5f33f11f8bd" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/InterlockingVariableInterface">
+        <Attribute Name="refURI" AttributeDataType="xs:anyURI" />
+        <Attribute Name="Direction" AttributeDataType="xs:string" />
+        <Attribute Name="SafeConditionEquals" AttributeDataType="xs:boolean" />
+      </ExternalInterface>
+    </RoleClass>
+    <RoleClass Name="LogicModelObject" RefBaseClassPath="AutomationMLBaseRoleClassLib/AutomationMLBaseRole">
+      <ExternalInterface Name="ReferenceSequence" ID="dbbb8615-3003-43ea-81e5-5b78e0654a79" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/SequencingLogicModelInterface">
+        <Attribute Name="refURI" AttributeDataType="xs:anyURI" />
+      </ExternalInterface>
+      <ExternalInterface Name="ReferenceBehaviour" ID="b34a2b98-dd40-4d94-b5ad-110d46729650" RefBaseClassPath="AutomationMLLogicInterfaceClassLib/BehaviourLogicModelInterface">
+        <Attribute Name="refURI" AttributeDataType="xs:anyURI" />
+      </ExternalInterface>
+    </RoleClass>
+  </RoleClassLib>
   <AttributeTypeLib Name="AutomationMLBaseAttributeTypeLib">
     <Description>Standard Automation Markup Language Attribute Type Library</Description>
     <Version>1.0</Version>
@@ -620,5 +624,11 @@
     <AttributeType Name="AssociatedValue" />
     <AttributeType Name="MIMEType" AttributeDataType="xs:string" />
     <AttributeType Name="DocLang" AttributeDataType="xs:string" />
+  </AttributeTypeLib>
+  <AttributeTypeLib Name="ZAttributeTypeLib">
+    <Version>1.0.0</Version>
+    <AttributeType Name="ZObjectRelation" AttributeDataType="xs:string">
+      <Description>Objekttype als CAEX Pfad, welcher als Interface auf ein anderes Objekt in Form eines Mirrorobjektes für die Verwendung initialisiert werden kann.</Description>
+    </AttributeType>
   </AttributeTypeLib>
 </CAEXFile>

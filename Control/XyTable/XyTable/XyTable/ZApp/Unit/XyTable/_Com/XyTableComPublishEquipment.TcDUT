@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="XyTableComPublishEquipment" Id="{dcc193ca-5b87-4548-8f18-bf15730ed0cf}">
+    <Declaration><![CDATA[TYPE XyTableComPublishEquipment :
+STRUCT
+
+{region "AxisX : Axis"}
+  AxisX : ZApplication.AxisComPublish;
+  {attribute 'ZId' := 'fcb4f634-5402-488a-b9f2-f463d25a2352'}
+{endregion}
+
+{region "AxisY : Axis"}
+  AxisY : ZApplication.AxisComPublish;
+  {attribute 'ZId' := '5efb0243-1556-4e56-aeca-16ed0d08aedd'}
+{endregion}
+
+{region "Pen : ActuatorDigital"}
+  Pen : ZApplication.ActuatorDigitalComPublish;
+  PenDown : ZApplication.DigitalComPublish;
+  PenUp : ZApplication.DigitalComPublish;
+  PenIsDown : ZApplication.DigitalComPublish;
+  PenIsUp : ZApplication.DigitalComPublish;
+  {attribute 'ZId' := 'a2af64cd-ae98-4060-afd2-2cfacfac101c'}
+{endregion}
+
+{attribute '__ZwPlcUnitComDeclaration__'} // Do not remove this attribute! It is used for code generation.
+
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

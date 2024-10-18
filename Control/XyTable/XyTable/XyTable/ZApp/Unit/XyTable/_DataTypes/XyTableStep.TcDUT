@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="XyTableStep" Id="{6c36fa26-a7a4-4ed5-8cdf-34d89c85dde6}">
+    <Declaration><![CDATA[/// This enumeration contains all steps that are used by the various sequences of a unit.
+/// Sequences use a subrange (***Begin to ***End) of this enumeration.
+{attribute 'qualified_only'}
+{attribute 'to_string'}
+TYPE XyTableStep :
+(
+  Undefined := 0
+  
+  ,BootBegin
+  ,BootEnd 
+
+  ,StopBegin
+  ,StopEnd
+
+  ,AutomaticBegin
+  ,AutomaticWaitSegment
+  ,AutomaticMoveToSegmentStart
+  ,AutomaticMovePenDown
+  ,AutomaticDraw
+  ,AutomaticMovePenUp
+  ,AutomaticDrawLine
+  ,AutomaticDrawCatmulRomDrawSplineBegin
+  ,AutomaticDrawCatmulRomDrawSpline
+  ,AutomaticEnd
+  
+  ,GoHomeBegin
+  ,GoHomeMoveUp
+  ,GoHomeReferenceXY
+  ,GoHomeEnd 
+  
+  ,FaultReactionBegin
+  ,FaultReactionEnd
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="XyTableDataRef" Id="{e7764d7c-fa14-4a4e-a483-788c34f46e20}">
+    <Declaration><![CDATA[/// container for all data that are used by the unit
+TYPE XyTableDataRef :
+STRUCT
+  Config : REFERENCE TO XyTableDataConfig; // data required for booting the unit (axes configuration, simulation, parameters that have to be written in PREOP, ...)
+  Machine : REFERENCE TO XyTableDataMachine; // speeds, positions, ...
+  Calibration : REFERENCE TO XyTableDataCalibration; // offsets, shifts of nominal to actual values
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

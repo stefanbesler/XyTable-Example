@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="XyTableSequence" Id="{8adde948-0de8-4f50-8802-bf5d771fb896}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK XyTableSequence EXTENDS ZApplication.Sequence
+VAR
+  {attribute 'hide'}
+  _parent : REFERENCE TO XyTableUnit;
+  _io : REFERENCE TO XyTableIo;
+  _actuator : REFERENCE TO XyTableActuator;
+  _fieldbus : REFERENCE TO XyTableFieldbus;
+  _axis : REFERENCE TO XyTableAxis;
+  _data : REFERENCE TO XyTableDataRef;
+  _unit : REFERENCE TO XyTableLinkedUnit;
+  _segments : REFERENCE TO RingBufferSegment;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{8ef4867e-ea0a-4355-a115-99eaea1f8938}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+  bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+  bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+  unit : REFERENCE TO XyTableUnit;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_parent REF= unit;
+_alarming := unit._alarming;
+_io REF= unit._equipment.Io;
+_actuator REF= unit._equipment.Actuator;
+_fieldbus REF= unit._equipment.Fieldbus;
+_axis REF= unit._equipment.Axis;
+_unit REF= unit._equipment.Unit;
+_data REF= unit._data;
+_loggerDiagnostics.SetLogger(unit._logger);
+
+_segments REF= unit._segments;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StepDecoded" Id="{0e5fd6b2-a80b-4bd5-8a0e-e93d65755fd4}">
+      <Declaration><![CDATA[METHOD StepDecoded : ZCore.ZString
+VAR_INPUT
+  stepIndex : INT;
+END_VAR
+VAR_INST
+  _stepIndexDecoded : XyTableStep;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_stepIndexDecoded := stepIndex;
+stepDecoded := TO_STRING(_stepIndexDecoded);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

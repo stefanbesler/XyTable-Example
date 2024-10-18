@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="XyTableSequenceAutomatic" Id="{de11c958-7b36-4afe-9993-58be33d10feb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK XyTableSequenceAutomatic EXTENDS XyTableSequence IMPLEMENTS ZCore.ISequence
+VAR
+  _step : ZCore.Step(XyTableStep.AutomaticBegin, XyTableStep.AutomaticEnd);
+  _segment : REFERENCE TO Segment;
+  _rt : ZAux.RealTime;
+  _otg : Struckig.Otg(0.001, 2);
+  
+  _splineLogicBuffer : ARRAY [0..8] OF DINT;
+  _splinePointBuffer : ARRAY [0..8*2] OF LREAL;
+  _splineTangentBuffer : ARRAY [0..8*2] OF LREAL;
+  _splineSegmentBuffer : ARRAY [0..8] OF LREAL;
+  _spline : ZCore.CatmullRomSpline(8, ADR(_splineLogicBuffer), ADR(_splinePointBuffer), ADR(_splineTangentBuffer), ADR(_splineSegmentBuffer), 2);
+  
+  _splineIndex : INT;
+  i : INT;
+END_VAR
+VAR_OUTPUT
+  ProbeX : LREAL;
+  ProbeY : LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT Busy THEN
+  RETURN;
+END_IF
+
+IF OnStart(_step) THEN
+  ; // init custom sequence variables here ...
+END_IF
+
+IF OnStop() THEN
+  RETURN; // external stop was triggered
+END_IF
+
+IF OnHalt() THEN
+  Halting := TRUE; // Uncomment to acknowledge that the sequence is halting
+END_IF
+
+REPEAT
+  LogStep();
+
+  CASE _step.Index OF
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticBegin:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        ;
+      END_IF
+
+      _step.SetNext(XyTableStep.AutomaticWaitSegment);
+    
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticWaitSegment:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        Milestone('Waiting for segment');
+              
+        _otg.MaxJerk[0] := 100000;
+        _otg.MaxJerk[1] := 100000;         
+        _otg.MaxAcceleration[0] := 10000;
+        _otg.MaxAcceleration[1] := 10000; 
+        _otg.MaxVelocity[0] := 200;
+        _otg.MaxVelocity[1] := 200;            
+      END_IF
+
+      IF Halting
+      THEN
+        _step.SetNext(XyTableStep.AutomaticEnd);
+      ELSIF NOT _segments.Empty
+      THEN
+        _segment REF= _segments.ItemAt(0);
+        _step.SetNext(XyTableStep.AutomaticMoveToSegmentStart);
+			END_IF
+
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticMoveToSegmentStart:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        _axis.AxisX.MoveAbsoluteAsync(THIS^, _segment.Points[0].X, _data.Machine.Highspeed);
+        _axis.AxisY.MoveAbsoluteAsync(THIS^, _segment.Points[0].Y, _data.Machine.Highspeed);        
+      END_IF
+
+      Await2(_axis.AxisX, _axis.AxisY, XyTableStep.AutomaticMovePenDown);
+    
+    
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticMovePenDown:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        _actuator.Pen.DownAsync(THIS^);       
+      END_IF
+
+      Await(_actuator.Pen, XyTableStep.AutomaticDraw);
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticDraw:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      
+    IF _step.OnEntry()
+    THEN
+      _axis.AxisX.MoveInterpolatedPositionAsync(THIS^);
+      _axis.AxisY.MoveInterpolatedPositionAsync(THIS^); 
+		END_IF
+ 
+    Assert(_axis.AxisX);
+    Assert(_axis.AxisY);
+    
+    IF NOT _axis.AxisX.Busy AND_THEN NOT _axis.AxisY.Busy
+    THEN
+       CASE _segment.Verb
+      OF
+        SegmentType.LinePoints: _step.SetNext(XyTableStep.AutomaticDrawLine);
+        SegmentType.CatmulRomPoints: _step.SetNext(XyTableStep.AutomaticDrawCatmulRomDrawSplineBegin);
+      ELSE
+        Abort('Unsupported Verb');     
+			END_CASE   
+		END_IF
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticMovePenUp:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+      //  _actuator.Pen.UpAsync(THIS^);
+        _segments.PopFirstItem();
+      END_IF
+
+      //Await(_actuator.Pen, XyTableStep.AutomaticWaitSegment);
+      _step.SetNext(XyTableStep.AutomaticWaitSegment);
+      
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticDrawLine:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        _otg.CycleTime := _rt.CycleTimeInSeconds();
+        _otg.ControlInterface := Struckig.ControlInterfaceType.Position;
+        _otg.CurrentAcceleration[0] := 0;
+        _otg.CurrentAcceleration[1] := 0;
+        _otg.CurrentVelocity[0] := 0;
+        _otg.CurrentVelocity[1] := 0;        
+        _otg.CurrentPosition[0] := _segment.Points[0].X;
+        _otg.CurrentPosition[1] := _segment.Points[0].Y;
+        _otg.Discretization := Struckig.DiscretizationType.Discrete;
+        _otg.EnableAutoPropagate := TRUE;  
+        _otg.Synchronization := Struckig.SynchronizationType.Phase;
+        _otg.TargetPosition[0] := _segment.Points[1].X;
+        _otg.TargetPosition[1] := _segment.Points[1].Y;        
+        _otg.TargetAcceleration[0] := 0;
+        _otg.TargetAcceleration[1] := 0;
+        _otg.TargetVelocity[0] := 0;
+        _otg.TargetVelocity[1] := 0;
+      END_IF
+      
+      _otg();
+      _axis.AxisX.SetInterpolatedPosition(THIS^, _otg.CurrentPosition[0]);
+      _axis.AxisY.SetInterpolatedPosition(THIS^, _otg.CurrentPosition[1]);
+      
+      ProbeX := _otg.CurrentPosition[0];
+      ProbeY := _otg.CurrentPosition[1];
+      
+      IF _otg.State = Struckig.TrajectoryState.Error
+      THEN
+        AbortErrorId(ANY_TO_UDINT(_otg.ErrorCode()), 'Trajectory Error');
+      ELSIF _otg.State = Struckig.TrajectoryState.Idle
+      THEN
+        _step.SetNext(XyTableStep.AutomaticMovePenUp);        
+			END_IF
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticDrawCatmulRomDrawSplineBegin:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    
+      _otg.CycleTime := _rt.CycleTimeInSeconds();
+      _otg.ControlInterface := Struckig.ControlInterfaceType.Position;
+      _otg.Discretization := Struckig.DiscretizationType.Discrete;
+      _otg.EnableAutoPropagate := TRUE;
+      _otg.Synchronization := Struckig.SynchronizationType.Phase;    
+      _otg.CurrentAcceleration[0] := 0;
+      _otg.CurrentAcceleration[1] := 0;        
+      _otg.CurrentVelocity[0] := 0;
+      _otg.CurrentVelocity[1] := 0;        
+      _otg.CurrentPosition[0] := _segment.Points[0].X;
+      _otg.CurrentPosition[1] := _segment.Points[0].Y;
+      _otg.TargetAcceleration[0] := 0;
+      _otg.TargetAcceleration[1] := 0;  
+      _spline.Clear();
+      
+      // todo: make this more dynamic ...
+      FOR i:=0 TO 4
+      DO 
+        _spline.Append(((i) / INT_TO_LREAL(4)), ADR(_segment.Points[i]));
+      END_FOR
+
+      _spline.Interpolate(0,0,0,0);
+      _splineIndex := 0;
+      _step.SetNext(XyTableStep.AutomaticDrawCatmulRomDrawSpline);
+      
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticDrawCatmulRomDrawSpline:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        _otg.TargetPosition[0] := _splinePointBuffer[_splineIndex*2];
+        _otg.TargetPosition[1] := _splinePointBuffer[_splineIndex*2+1];      
+        _otg.TargetVelocity[0] := _splineTangentBuffer[_splineIndex*2+1]; 
+        _otg.TargetVelocity[1] := _splineTangentBuffer[_splineIndex*2+1]; 
+      END_IF
+      
+      _otg();
+      ProbeX := _otg.CurrentPosition[0];
+      ProbeY := _otg.CurrentPosition[1];
+      
+      IF _otg.State = Struckig.TrajectoryState.Error
+      THEN
+        AbortErrorId(_otg.ErrorCode(), 'Trajectory Error');
+      ELSIF _otg.State = Struckig.TrajectoryState.Idle
+      THEN
+        IF _splineIndex < 4
+        THEN
+          _splineIndex := _splineIndex + 1;
+          _step.RepeatStep();
+        ELSE
+          _step.SetNext(XyTableStep.AutomaticMovePenUp);                  
+				END_IF
+			END_IF      
+    
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.AutomaticEnd:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      SetBusy(FALSE);
+  
+  ELSE
+    Abort('sequence contains unhandled step');
+  END_CASE
+UNTIL _step.IsNotRepeatable() OR_ELSE NOT Busy END_REPEAT]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

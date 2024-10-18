@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="XyTableContainer" Id="{8fa6b49f-3863-40f4-8972-f533703299f8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK XyTableContainer EXTENDS ZCore.ObjectContainer
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+  {attribute 'hide'}
+  _parent : REFERENCE TO XyTableUnit;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{899a5a48-62b7-497c-90b4-9532efaffdc1}">
+      <Declaration><![CDATA[{attribute 'hide' }
+METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+  unit : REFERENCE TO XyTableUnit;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_parent REF= unit;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

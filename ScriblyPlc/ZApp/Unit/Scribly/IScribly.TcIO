@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <Itf Name="IScribly" Id="{0b4fb60c-e5d9-47a6-85d8-a573a03570d0}">
-    <Declaration><![CDATA[INTERFACE IScribly EXTENDS ZApplication.IUnit
-]]></Declaration>
-  </Itf>
-</TcPlcObject>

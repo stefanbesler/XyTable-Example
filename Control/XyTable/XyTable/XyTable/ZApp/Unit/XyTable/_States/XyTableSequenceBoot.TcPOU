@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="XyTableSequenceBoot" Id="{19e9447f-9e60-4d97-a432-c1dbecf3f0f4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK XyTableSequenceBoot EXTENDS XyTableSequence IMPLEMENTS ZCore.ISequence
+VAR
+  _step : ZCore.Step(XyTableStep.BootBegin, XyTableStep.BootEnd);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF OnStart(_step) THEN
+  ; // init custom sequence variables here ...
+END_IF
+
+REPEAT
+  LogStep();
+
+  CASE _step.Index OF
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.BootBegin:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        // initialize equipment
+        _io();
+        _actuator();
+        _fieldbus();
+        _axis();
+        _unit();
+      END_IF
+      
+      _parent._objectManager.Cyclic();      
+      Assert(_parent._objectManager);
+      IF _parent._objectManager.Booted
+      THEN
+        _step.SetNext(XyTableStep.BootEnd);
+      END_IF
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.BootEnd:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      SetBusy(FALSE);
+      
+  ELSE
+    Abort('sequence contains unhandled step');
+  END_CASE
+UNTIL _step.IsNotRepeatable() OR_ELSE NOT Busy END_REPEAT]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

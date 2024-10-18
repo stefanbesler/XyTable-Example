@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="XyTableSequenceStop" Id="{5234c11a-00b6-4821-a437-f86c648ef21c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK XyTableSequenceStop EXTENDS XyTableSequence IMPLEMENTS ZCore.ISequence
+VAR
+  _step : ZCore.Step(XyTableStep.StopBegin, XyTableStep.StopEnd);
+  _timerSim : ZAux.Timer;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF OnStart(_step) THEN
+  ; // init custom sequence variables here ...
+END_IF
+
+REPEAT
+  LogStep();
+
+  CASE _step.Index OF
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.StopBegin:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        _actuator.Pen.UpAsync(THIS^);
+        _axis.AxisX.StopAsync(THIS^);
+        _axis.AxisY.StopAsync(THIS^);
+			END_IF
+      
+      Await3(_actuator.Pen, _axis.AxisX, _axis.AxisY, nextStep:=XyTableStep.StopEnd);
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.StopEnd:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)    
+      SetBusy(FALSE);
+  
+  ELSE
+    Abort('sequence contains unhandled step');
+  END_CASE
+UNTIL _step.IsNotRepeatable() OR_ELSE NOT Busy END_REPEAT]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

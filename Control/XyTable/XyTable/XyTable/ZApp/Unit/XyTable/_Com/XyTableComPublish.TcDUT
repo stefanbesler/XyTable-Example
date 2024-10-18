@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="XyTableComPublish" Id="{52856fbb-095d-4a7c-bcbe-9a061bf0df94}">
+    <Declaration><![CDATA[/// this is the container of informations that the unit wants to share with the world outside of the PLC
+/// This struct should only be read from by external applications.
+TYPE XyTableComPublish :
+STRUCT
+  State : ZApplication.UnitStateMachineState; // state the unit is in
+  Request : XyTableComRequest; // booleans that indictate which action is currently possible to perform with this unit
+  Equipment : XyTableComPublishEquipment;  // structs for equipment objects which are used by the bridges
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

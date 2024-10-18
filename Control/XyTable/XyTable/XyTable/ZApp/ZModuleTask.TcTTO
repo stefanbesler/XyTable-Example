@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Task Name="ZModuleTask" Id="{ceac6631-0b65-48f0-9442-c08d7207ed83}">
+    <!--CycleTime in micro seconds.-->
+    <CycleTime>10000</CycleTime>
+    <Priority>20</Priority>
+    <PouCall>
+      <Name>ZModuleProgram</Name>
+    </PouCall>
+    <TaskFBGuid>{16ce8a02-8d62-4484-8d80-bf307868293e}</TaskFBGuid>
+    <Fb_init>{a830d1ed-cb0b-4a52-8bc0-aabe3a663281}</Fb_init>
+    <Fb_exit>{4390ad94-02be-4680-9f99-6efbb7757677}</Fb_exit>
+    <CycleUpdate>{3d39f42b-54f9-4f01-8e1c-ce250ea973d4}</CycleUpdate>
+    <PostCycleUpdate>{532d1380-7549-4a66-91aa-679f7695f710}</PostCycleUpdate>
+  </Task>
+</TcPlcObject>

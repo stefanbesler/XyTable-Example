@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="XyTableComSubscribeSegments" Id="{4dacbee3-1536-42ac-9130-f733008dbf57}">
+    <Declaration><![CDATA[TYPE XyTableComSubscribeSegments :
+STRUCT
+  Start : DINT;
+  End : DINT;
+  Data : ARRAY[0..10] OF Segment;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

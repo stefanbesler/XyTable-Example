@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ZDataConfig" Id="{6cae88b9-db8f-4f3c-97a5-22e813e26bff}">
+    <Declaration><![CDATA[TYPE ZDataConfig :
+STRUCT
+{region "XyTable"}
+{IF NOT (defined (XyTable_disabled))}
+  XyTable : XyTableDataConfig;
+  {attribute 'ZId' := '934662f7-81a9-4247-b804-76d465c7ec61'}
+{END_IF}
+{endregion}
+{attribute '__ZwPlcApplicationDataConfigDeclaration__'} // Do not remove this attribute! It is used for code generation.
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

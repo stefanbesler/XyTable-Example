@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="XyTableSequenceGoHome" Id="{51c47bad-e8f4-4fe9-b438-9536d1a0a637}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK XyTableSequenceGoHome EXTENDS XyTableSequence IMPLEMENTS ZCore.ISequence
+VAR
+  _step : ZCore.Step(XyTableStep.GohomeBegin, XyTableStep.GohomeEnd);
+  _timer : ZAux.Timer;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT Busy THEN
+  RETURN;
+END_IF
+
+IF OnStart(_step) THEN
+  ; // init custom sequence variables here ...
+END_IF
+
+IF OnStop() THEN
+  RETURN; // external stop was triggered
+END_IF
+
+IF OnHalt() THEN
+  ; // Halting := TRUE; // Uncomment to acknowledge that the sequence is halting
+END_IF
+
+REPEAT
+  LogStep();
+
+  CASE _step.Index OF
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.GoHomeBegin:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        ;
+			END_IF
+
+      _step.SetNext(index:=XyTableStep.GoHomeMoveUp);
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.GoHomeMoveUp:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        _actuator.Pen.UpAsync(THIS^);
+			END_IF
+      
+      Await(_actuator.Pen, nextStep:=XyTableStep.GoHomeReferenceXY);
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.GoHomeReferenceXY:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      IF _step.OnEntry()
+      THEN
+        _axis.AxisX.HomingAsync(THIS^);
+        _axis.AxisY.HomingAsync(THIS^);
+			END_IF
+      
+      Await3(_actuator.Pen, _axis.AxisX, _axis.AxisY, nextStep:=XyTableStep.GoHomeEnd);
+
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+    XyTableStep.GoHomeEnd:
+    (* -------------------------------------------------------------------------------------------------------------------------------- *)
+      SetBusy(FALSE);
+  
+  ELSE
+    Abort('sequence contains unhandled step');
+  END_CASE
+UNTIL _step.IsNotRepeatable() OR_ELSE NOT Busy END_REPEAT]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
