@@ -1,17 +1,34 @@
-from direct.showbase.ShowBase import ShowBase
+import pyads
+import math
+import numpy as np
+from PIL import Image
+
 from panda3d.core import Vec3, LVecBase4
 from panda3d.core import GeomNode, VBase4, LVecBase4f
 from panda3d.core import DirectionalLight, AmbientLight
 from panda3d.core import LineSegs
-from direct.task import Task
+from panda3d.core import AntialiasAttrib
 from panda3d.core import CardMaker
+from panda3d.core import Texture, TransparencyAttrib
+from panda3d.core import PNMImage
 from panda3d.core import NodePath
+from panda3d.core import WindowProperties
+
+from direct.showbase.ShowBase import ShowBase
+from direct.task import Task
 from direct.interval.IntervalGlobal import LerpPosInterval
 
 class XYTableApp(ShowBase):
     def __init__(self):
         super().__init__()
-
+        
+        # Connect to PLC
+        pyads.ads.open_port()
+        netid = pyads.ads.get_local_address().netid
+        pyads.ads.close_port()
+        self.plc = pyads.Connection("127.0.0.1.1.1", 851)
+        self.plc.open()
+        
         self.setBackgroundColor(71./255., 91./255., 120./255., 1)
 
         # Disable default camera movement
@@ -21,61 +38,43 @@ class XYTableApp(ShowBase):
         self.camera.setPos(15, -15, 15)
         self.camera.lookAt(0, 0, 0)
 
-        # Create the table base (grid) using a large plane (for the drawing surface)
         self.create_grid()
-
-        # Create Y-axis rail (stationary)
-        self.y_rail = self.create_box(scale=(0.2, 40, 0.2), position=(-4.5, 0, 0), color=(245./255., 241./255., 238./255., 1))
-
-        # Create X-axis rail (moving along Y-axis)
-        self.x_rail = self.create_box(scale=(20, 0.2, 0.2), position=(5, 10, 0), color=(245./255., 241./255., 238./255., 1))
-        
-        # Create the tool (pen holder) mounted on the X-axis rail
-        self.tool = self.create_box(scale=(0.1, 1.5, 1.5), position=(0, 0, 0), color=(218./255., 119./255., 109./255., 1))
-        self.tool.reparentTo(self.x_rail)  # Attach the tool to the X-axis rail
-
-        # Create the pen tip (small box on the bottom of the tool)
-        self.pen_down = False
+        self.y_rail = self.create_box(scale=(0.5, 32, 0.5), position=(-4.5, 0, 0), color=(42./255., 51./255., 75./255., 1))
+        self.x_rail = self.create_box(scale=(20, 0.4, 0.4), position=(5, 10, 0), color=(42./255., 51./255., 75./255., 1))
+        self.tool = self.create_box(scale=(0.5, 0.5, 0.5), position=(0, 0, 0), color=(218./255., 119./255., 109./255., 1))
         self.pen_tip = self.create_box(scale=(0.1, 0.1, 3.1), position=(0, 0, 0.5), color=(245./255., 241./255., 238./255., 1))
         self.pen_tip.reparentTo(self.tool)
+        self.pen_down = False
+        
+        self.texture = self.create_texture()        
+        
+        self.updateTask = taskMgr.add(self.update, "update")
 
-        # Setup key controls for movement
-        self.accept("arrow_up", self.move_x_rail, [0, 0.1])
-        self.accept("arrow_down", self.move_x_rail, [0, -0.1])
-        self.accept("arrow_left", self.move_tool, [-0.1, 0])
-        self.accept("arrow_right", self.move_tool, [0.1, 0])
-        self.accept("d", self.move_pen_down)
-        self.accept("u", self.move_pen_up)
-
-        # Track the pen's path
         self.pen_positions = []
-
-        # Lighting
         self.setup_lights()
-
-        # Pen's initial Z-position
         self.pen_z_position = 0.5
 
     def create_grid(self):
-        """Create the grid (table surface) for drawing."""
+        
+        def create_line(start, end, color):
+            lines = LineSegs()
+            lines.setThickness(0.1)
+            lines.setColor(*color)
+            lines.moveTo(start)
+            lines.drawTo(end)
+            line_node = lines.create()
+
+            # Convert GeomNode to NodePath
+            line_path = NodePath(line_node)
+            line_path.reparentTo(self.render)
+        
         grid_size = 20
         step = 1
         for x in range(-grid_size, grid_size + 1, step):
-            self.create_line(start=Vec3(x, -grid_size, 0), end=Vec3(x, grid_size, -0.5), color=(202./255., 208./255., 222./255., 1))
+            create_line(start=Vec3(x, -grid_size, -2), end=Vec3(x, grid_size, -2), color=(202./255., 208./255., 222./255., 1))
         for y in range(-grid_size, grid_size + 1, step):
-            self.create_line(start=Vec3(-grid_size, y, 0), end=Vec3(grid_size, y, -0.5), color=(202./255., 208./255., 222./255., 1))
+            create_line(start=Vec3(-grid_size, y, -2), end=Vec3(grid_size, y, -2), color=(202./255., 208./255., 222./255., 1))
 
-    def create_line(self, start, end, color):
-        """Create a line segment (primitive) to simulate grid lines."""
-        lines = LineSegs()
-        lines.setColor(*color)
-        lines.moveTo(start)
-        lines.drawTo(end)
-        line_node = lines.create()
-
-        # Convert GeomNode to NodePath
-        line_path = NodePath(line_node)
-        line_path.reparentTo(self.render)
 
     def create_box(self, scale, position, color):
         """Create a 3D box (primitive) with a given scale, position, and color."""
@@ -85,51 +84,66 @@ class XYTableApp(ShowBase):
         box.setColor(color)
         box.reparentTo(self.render)
         return box
-
-    def move_x_rail(self, dx, dy):
-        """Move the X-rail in the Y direction based on keyboard input."""
-        current_pos = self.x_rail.getPos()
-        new_y = current_pos.y + dy
-
-        # Keep the X-rail within the boundaries of the Y axis
-        if -20 < new_y < 20:
-            self.x_rail.setPos(current_pos.x, new_y, current_pos.z)
-
-            # Track the pen position (drawing on the table)
-            if self.pen_down:
-                self.track_pen_path()
-
-    def move_tool(self, dx, dy):
-        """Move the pen/tool along the X-axis (along the X-rail)."""
-        current_pos = self.tool.getPos()
-        new_x = current_pos.x + dx
-
-        # Keep the tool within the boundaries of the X axis
-        if -5 < new_x < 5:
-            self.tool.setPos(new_x, current_pos.y, current_pos.z)
-
-            # Update the pen position (drawing on the table)
-            if self.pen_down:
-                self.track_pen_path()
-
-    def move_pen_down(self):
-        """Move the pen downwards with animation."""
-        if self.pen_z_position > -1.5:  # Ensure we don't go too low
-            self.animate_pen_position(self.pen_z_position, -0.5)
-            self.pen_z_position = -0.5  # Update the current position
-            self.pen_down = True
+    
+    def update(self, task):
+        dt = globalClock.getDt()
+        
+        move_up = self.plc.read_by_name(f"ZGlobal.Com.Unit.XyTable.Publish.Equipment.PenUp.Enabled", pyads.PLCTYPE_BOOL)
+        move_down = self.plc.read_by_name(f"ZGlobal.Com.Unit.XyTable.Publish.Equipment.PenDown.Enabled", pyads.PLCTYPE_BOOL)
+        pen_down = self.plc.read_by_name(f"ZGlobal.Com.Unit.XyTable.Publish.Equipment.PenIsDown.Enabled", pyads.PLCTYPE_BOOL)
+        
+        if move_up:
+            self.move_pen_up(dt)
+        elif move_down:
+            self.move_pen_down(dt)
+            
+        if pen_down and not self.pen_down:
             self.pen_positions.append([])
+            
+        self.pen_down = pen_down
+        
+        if pen_down:
+            self.track_pen_path()
 
-    def move_pen_up(self):
+        x = (self.plc.read_by_name(f"ZGlobal.Com.Unit.XyTable.Publish.Equipment.AxisX.Base.ActualPosition", pyads.PLCTYPE_LREAL) - 70) / 10
+        y = (self.plc.read_by_name(f"ZGlobal.Com.Unit.XyTable.Publish.Equipment.AxisY.Base.ActualPosition", pyads.PLCTYPE_LREAL)- 40) / 10
+        self.move_rail(x)
+        self.move_tool(y, x)
+        
+        return task.cont
+    
+    def move_rail(self, y):
+        """Move the X-rail in the Y direction based on keyboard input."""
+        
+        current_pos = self.x_rail.getPos()
+        self.x_rail.setPos(current_pos.x, y, current_pos.z)
+
+    def move_tool(self, x, y):
+        """Move the pen/tool along the X-axis (along the X-rail)."""
+        
+        current_pos = self.tool.getPos()
+        self.tool.setPos(x, y, current_pos.z)
+
+
+    def move_pen_down(self, dt):
+        """Move the pen downwards with animation."""
+
+        if self.pen_z_position > -0.75:  # Ensure we don't go too low
+            self.animate_pen_position(self.pen_z_position, -0.75)
+            self.pen_z_position = -0.75  # Update the current position
+
+
+    def move_pen_up(self, dt):
         """Move the pen upwards with animation."""
-        if self.pen_z_position < 1.5:  # Ensure we don't go too high
-            self.animate_pen_position(self.pen_z_position, 0.5)
-            self.pen_z_position = 0.5  # Update the current position
-            self.pen_down = False
 
+        if self.pen_z_position < 0.75:  # Ensure we don't go too low
+            self.animate_pen_position(self.pen_z_position, 0.75)
+            self.pen_z_position = 0.75  # Update the current position
+
+            
     def animate_pen_position(self, start_z, end_z):
         """Animate the pen's movement along the Z-axis."""
-        duration = 1.0  # 1 second for the movement
+        duration = 0.5  # 1 second for the movement
 
         # Define the pen movement interval using LerpPosInterval
         pen_move_interval = LerpPosInterval(
@@ -143,33 +157,70 @@ class XYTableApp(ShowBase):
 
     def track_pen_path(self):
         """Track the pen's position and draw a line as the tool moves."""
-        current_pen_pos = self.tool.getPos(render) + Vec3(0, 0, -0.5)  # Adjust for the pen's tip position
+        current_pen_pos = self.pen_tip.getPos(render) + Vec3(0, 0, -0.5)  # Adjust for the pen's tip position
 
         # Add the current pen position to the list of tracked positions
-        if len(self.pen_positions[-1]) == 0 or (current_pen_pos - self.pen_positions[-1][-1]).length() > 0.005:
+        if len(self.pen_positions[-1]) == 0 or (current_pen_pos - self.pen_positions[-1][-1]).length() > 1e-19:
             self.pen_positions[-1].append(current_pen_pos)
 
             # Draw lines representing the pen's path
             self.draw_pen_path()
 
+
+
+    def create_texture(self, size = 64, radius=32):
+        """Create a circular Gaussian texture."""
+        
+        pnm_image = PNMImage(size, size, 4)  # width, height, and 4 channels (RGBA)
+        center = size // 2
+
+        for i in range(size):
+            for j in range(size):
+                pnm_image.setXelA(j, i, 0)
+                
+        for i in range(size):
+            for j in range(size):
+                distance = np.sqrt((i - center) ** 2 + (j - center) ** 2)
+
+                if distance <= radius:
+                    pnm_image.setXel(j, i, 1, 1, 1)
+                    pnm_image.setXelA(j, i, 1)
+                
+        pnm_image.write("test1.png")             
+
+        img_texture = Texture("GaussianTexture")
+        img_texture.load(pnm_image)
+        
+        img_texture.setMinfilter(Texture.FT_linear)
+        img_texture.setMagfilter(Texture.FT_linear)
+        img_texture.setWrapU(Texture.WM_clamp)
+        img_texture.setWrapV(Texture.WM_clamp)        
+        
+        return img_texture
+
     def draw_pen_path(self):
-        """Render the path drawn by the pen as it moves across the table."""
+        """Render the path drawn by the pen using cards for better visibility."""
         if hasattr(self, 'pen_path'):
             self.pen_path.removeNode()  # Remove the previous path
 
-        lines = LineSegs()
-        lines.setColor(218./255., 119./255., 109./255., 1)  # Blue color for the pen path
-        lines.setThickness(2.0)
+        # Create a new NodePath to store the pen path
+        self.pen_path = NodePath("pen_path")
+        self.pen_path.reparentTo(self.render)
 
-        # Draw lines between each pair of positions
         for i in range(len(self.pen_positions)):
             for j in range(len(self.pen_positions[i]) - 1):
-                lines.moveTo(self.pen_positions[i][j])
-                lines.drawTo(self.pen_positions[i][j + 1])
-
-        # Convert GeomNode to NodePath
-        self.pen_path = NodePath(lines.create())
-        self.pen_path.reparentTo(self.render)
+                # Get start and end positions for each segment
+                start_pos = self.pen_positions[i][j]
+                end_pos = self.pen_positions[i][j + 1]
+                
+                card_maker = CardMaker('pen_segment_1')
+                card_maker.setFrame(-0.1, 0.1, -0.1, 0.1)
+                card = self.pen_path.attachNewNode(card_maker.generate())
+                card.lookAt(Vec3(0, 0, -1))
+                card.setPos(start_pos)
+                card.setTexture(self.texture)
+                card.setColor(218./255., 119./255., 109./255., 1)  # Pen path color
+                            
 
     def setup_lights(self):
         """Set up basic lighting for the scene."""
@@ -177,6 +228,7 @@ class XYTableApp(ShowBase):
         dlight_node = self.render.attachNewNode(dlight)
         dlight_node.setHpr(0, -60, 0)
         self.render.setLight(dlight_node)
+        self.render.setAntialias(AntialiasAttrib.MLine)
 
         alight = AmbientLight("alight")
         alight.setColor(LVecBase4(0, 0, 0, 1))

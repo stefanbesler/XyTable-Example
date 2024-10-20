@@ -30,6 +30,7 @@ THEN
   RETURN;
 END_IF
 
+  _axisbridge.LoadBalancer.Interval := 0;
   _axisbridge.SetLogger(_parent._logger);
 
 {region "AxisX : AxisPlcOpenMc"}

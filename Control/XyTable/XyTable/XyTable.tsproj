@@ -2,6 +2,9 @@
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.35">
 	<Project ProjectGUID="{628B424E-EC16-4240-877E-A87D96A8BEA4}" Target64Bit="true" ShowHideConfigurations="#x106">
 		<System>
+			<Settings MaxCpus="4" NonWinCpus="1">
+				<Cpu CpuId="3"/>
+			</Settings>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
 					<Name>ZModuleTask</Name>
@@ -10,15 +13,45 @@
 		</System>
 		<Plc>
 			<Project GUID="{5A5B70C5-D544-4E47-9452-D63A137AFEF2}" Name="XyTable" PrjFilePath="XyTable\XyTable.plcproj" TmcFilePath="XyTable\XyTable.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{405A9700-493F-09F1-D596-8AAE0B012D95}">
 					<Name>XyTable Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="1">
+						<Name>ZModuleTask Inputs</Name>
+						<Var>
+							<Name>ZModuleProgram.XyTable._equipment.Actuator.Pen.MinusInput._physicalLink</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ZModuleProgram.XyTable._equipment.Actuator.Pen.PlusInput._physicalLink</Name>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>ZModuleTask Outputs</Name>
+						<Var>
+							<Name>ZModuleProgram.XyTable._equipment.Actuator.Pen.MinusOutput._physicalLink</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ZModuleProgram.XyTable._equipment.Actuator.Pen.PlusOutput._physicalLink</Name>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
 					<Contexts>
 						<Context>
-							<Id>1</Id>
-							<Name>Default</Name>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>ZModuleTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
 				</Instance>
 			</Project>
 		</Plc>

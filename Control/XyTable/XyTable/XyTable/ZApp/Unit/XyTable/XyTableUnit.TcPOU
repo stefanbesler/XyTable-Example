@@ -19,7 +19,7 @@ VAR
   _observeTimer : ZAux.Timer;
   
   _segments : RingBufferSegment(
-                10, 
+                200, 
                 ADR(ZGlobal.Com.Unit.XyTable.Subscribe.Segments.Start),
                 ADR(ZGlobal.Com.Unit.XyTable.Subscribe.Segments.End),
                 ADR(ZGlobal.Com.Unit.XyTable.Subscribe.Segments.Data));      

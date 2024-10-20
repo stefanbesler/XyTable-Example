@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using System.IO;
 using System.Net.Sockets;
 using TwinCAT.Ads;
 
@@ -10,23 +11,23 @@ static void WriteSegment(AdsClient adsClient, uint hStart, uint hEnd, Span<SKPoi
     switch(verb)
     {
         case SKPathVerb.Line:
-            adsClient.WriteSymbolAsync($"ZGlobal.Com.Unit.Scribly.Subscribe.Segments.Data[{dataIndex}].Verb", 1, CancellationToken.None).Wait();
+            adsClient.WriteSymbolAsync($"ZGlobal.Com.Unit.XyTable.Subscribe.Segments.Data[{dataIndex}].Verb", 1, CancellationToken.None).Wait();
             count = 2;
             break;
         case SKPathVerb.Quad:
-            adsClient.WriteSymbolAsync($"ZGlobal.Com.Unit.Scribly.Subscribe.Segments.Data[{dataIndex}].Verb", 2, CancellationToken.None).Wait();
+            adsClient.WriteSymbolAsync($"ZGlobal.Com.Unit.XyTable.Subscribe.Segments.Data[{dataIndex}].Verb", 2, CancellationToken.None).Wait();
             count = 5;
             break;
     }
 
     for (var i = 0; i < count; i++)
     {
-        adsClient.WriteSymbolAsync($"ZGlobal.Com.Unit.Scribly.Subscribe.Segments.Data[{dataIndex}].Points[{i}].X", points[i].X, CancellationToken.None).Wait();
-        adsClient.WriteSymbolAsync($"ZGlobal.Com.Unit.Scribly.Subscribe.Segments.Data[{dataIndex}].Points[{i}].Y", points[i].Y, CancellationToken.None).Wait();
+        adsClient.WriteSymbolAsync($"ZGlobal.Com.Unit.XyTable.Subscribe.Segments.Data[{dataIndex}].Points[{i}].X", points[i].X, CancellationToken.None).Wait();
+        adsClient.WriteSymbolAsync($"ZGlobal.Com.Unit.XyTable.Subscribe.Segments.Data[{dataIndex}].Points[{i}].Y", points[i].Y, CancellationToken.None).Wait();
     }
 
-    dataIndex = dataIndex >= 10 ? 0 : dataIndex + 1;
-    while (adsClient.ReadAny<int>(hStart) == dataIndex || (dataIndex == 10 && adsClient.ReadAny<int>(hStart) == 0))
+    dataIndex = dataIndex >= 200 ? 0 : dataIndex + 1;
+    while (adsClient.ReadAny<int>(hStart) == dataIndex || (dataIndex == 200 && adsClient.ReadAny<int>(hStart) == 0))
         Thread.Sleep(1000);
 
     adsClient.WriteAny(hEnd, dataIndex);
@@ -82,14 +83,14 @@ static void DrawCatmullRomSpline(SKCanvas canvas, List<SKPoint> points)
 }
 
 var bitmap = new SKBitmap(800, 600);
-var column = 0;
-
-using(var adsClient = new AdsClient())
+var textWidth = 0.0f;
+using (var adsClient = new AdsClient())
 using (var canvas = new SKCanvas(bitmap))
 {
     adsClient.Connect(851);
-    var hStart = adsClient.CreateVariableHandle("ZGlobal.Com.Unit.Scribly.Subscribe.Segments.Start");
-    var hEnd = adsClient.CreateVariableHandle("ZGlobal.Com.Unit.Scribly.Subscribe.Segments.End");
+    var hStart = adsClient.CreateVariableHandle("ZGlobal.Com.Unit.XyTable.Subscribe.Segments.Start");
+    var hEnd = adsClient.CreateVariableHandle("ZGlobal.Com.Unit.XyTable.Subscribe.Segments.End");
+    
     Console.WriteLine("Type something (press Esc to exist):");
 
     while (true)
@@ -99,17 +100,23 @@ using (var canvas = new SKCanvas(bitmap))
         if (keyInfo.Key == ConsoleKey.Escape)
             break;
 
+        if (keyInfo.Key == ConsoleKey.Enter)
+        {
+            textWidth = 0;
+            Console.Clear();
+        }
+
         Console.Write(keyInfo.KeyChar.ToString());
 
-        canvas.Clear(SKColors.White);
         using (var paint = new SKPaint())
         {
             paint.TextSize = 50;
             paint.Color = SKColors.Black;
             paint.IsAntialias = true;
-
-            var path = paint.GetTextPath(keyInfo.KeyChar.ToString(), column * 50, 50);
-            canvas.DrawText(keyInfo.KeyChar.ToString(), column * 25, 50, paint);
+            
+            var charWidth = paint.MeasureText(keyInfo.KeyChar.ToString());
+            var path = paint.GetTextPath(keyInfo.KeyChar.ToString(), textWidth, 50);
+            textWidth += charWidth;
 
             var it = path.CreateIterator(false);
             var points = new Span<SKPoint>(new SKPoint[4]);
@@ -150,17 +157,6 @@ using (var canvas = new SKCanvas(bitmap))
                     segmentPoints[3] = BezierPoint(points, 0.75f);
                     segmentPoints[4] = points[2];
                     WriteSegment(adsClient, hStart, hEnd, segmentPoints, verb);
-
-
-                    var pathPoints = new List<SKPoint>();
-                    pathPoints.Add(points[0]);
-                    pathPoints.Add(points[0]);
-                    pathPoints.Add(BezierPoint(points, 0.25f));
-                    pathPoints.Add(BezierPoint(points, 0.5f));
-                    pathPoints.Add(BezierPoint(points, 0.75f));
-                    pathPoints.Add(points[2]);
-                    pathPoints.Add(points[2]);
-                    DrawCatmullRomSpline(canvas, pathPoints);
                 }
                 else if (verb == SKPathVerb.Cubic)
                 {
@@ -168,16 +164,6 @@ using (var canvas = new SKCanvas(bitmap))
                 }
             }
         }
-
-        using (var image = SKImage.FromBitmap(bitmap))
-        using (var data = image.Encode(SKEncodedImageFormat.Png, 90))
-        using (var stream = File.OpenWrite("output.png"))
-        {
-            var pixmap = image.PeekPixels();
-            data.SaveTo(stream);
-        }
-
-        column++;
     }
 }
 

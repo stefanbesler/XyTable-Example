@@ -33,10 +33,10 @@ END_IF
   Pen.SetLogger(_parent._logger);
   Pen.SetName(name:='Pen', movePlusName:='Up', moveMinusName:='Down', plusName:='IsUp', minusName:='IsDown');
   Pen.SetSimulation(SEL(_parent._data.Config.Simulated, ActuatorDigitalSimulation.Disabled, ZEquipment.ActuatorDigitalSimulation.Automatic));
-  Pen.SetSimulationUncertainty(uncertainty:=10);
+  Pen.SetSimulationUncertainty(uncertainty:=0);
   Pen.SetDelay(plusStartDuration:=0, plusEndDuration:=0, minusStartDuration:=0, minusEndDuration:=0, stop:=0);
-  Pen.SetSwitchDuration(plusDuration:=0.2, minusDuration:=0.2);
-  Pen.SetMovementDuration(plusDuration:=3, minusDuration:=3);
+  Pen.SetSwitchDuration(plusDuration:=0.0, minusDuration:=0.0);
+  Pen.SetMovementDuration(plusDuration:=0.75, minusDuration:=0.75);
   Pen.SetTimeout(plusDuration:=5, minusDuration:=5);
   _actuatorbridge.AddActuatorDigital(Pen, publish := _parent._com.Publish.Equipment.Pen, subscribe := _parent._com.Subscribe.Equipment.Pen);
   _iobridge.AddDigitalOutput(Pen.MinusOutput, publish := _parent._com.Publish.Equipment.PenDown, subscribe := _parent._com.Subscribe.Equipment.PenDown);
