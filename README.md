@@ -7,7 +7,7 @@ On the PLC side, depending on the segment type, either straight lines are drawn 
 
 
 <div style="display: flex; justify-content: space-between;">
-<img src="/Images/Peek 2024-10-20 23-25.gif"/>
+<img src="/Images/Peek 2024-10-20 23-45.gif"/>
 </div>
 
 ## Requirements

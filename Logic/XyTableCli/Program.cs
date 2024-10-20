@@ -1,8 +1,5 @@
 ﻿using SkiaSharp;
-using System.IO;
-using System.Net.Sockets;
 using TwinCAT.Ads;
-
 
 static void WriteSegment(AdsClient adsClient, uint hStart, uint hEnd, Span<SKPoint> points, SKPathVerb verb)
 {
@@ -46,53 +43,20 @@ static SKPoint BezierPoint(Span<SKPoint> controlPoints, float t)
         uu * controlPoints[0].Y + 2 * u * t * controlPoints[1].Y + tt * controlPoints[2].Y);
 }
 
-static void DrawCatmullRomSpline(SKCanvas canvas, List<SKPoint> points)
+static void Clear()
 {
-    if (points.Count < 4)
-        return;
-
-    for (float alpha = 0; alpha <= 1; alpha += 0.01f)
-    {
-
-        float alpha2 = alpha * alpha;
-        float alpha3 = alpha2 * alpha;
-
-        for (int i=1; i < points.Count - 2; i++)
-        {
-            var p0 = points[i - 1];
-            var p1 = points[i];
-            var p2 = points[i + 1];
-            var p3 = points[i + 2];
-
-            float x = 0.5f * (
-                (2.0f * p1.X) +
-                (-p0.X + p2.X) * alpha +
-                (2.0f * p0.X - 5.0f * p1.X + 4.0f * p2.X - p3.X) * alpha2 +
-                (-p0.X + 3.0f * p1.X - 3.0f * p2.X + p3.X) * alpha3);
-
-            float y = 0.5f * (
-                (2.0f * p1.Y) +
-                (-p0.Y + p2.Y) * alpha +
-                (2.0f * p0.Y - 5.0f * p1.Y + 4.0f * p2.Y - p3.Y) * alpha2 +
-                (-p0.Y + 3.0f * p1.Y - 3.0f * p2.Y + p3.Y) * alpha3);
-
-            canvas.DrawPoint(x, y, SKColors.Yellow);
-
-        }
-    }
+    Console.Clear();
+    Console.WriteLine("Type something (press 'Esc' to exit, 'Enter' to reset):");
 }
 
-var bitmap = new SKBitmap(800, 600);
 var textWidth = 0.0f;
+Clear();
 using (var adsClient = new AdsClient())
-using (var canvas = new SKCanvas(bitmap))
 {
     adsClient.Connect(851);
     var hStart = adsClient.CreateVariableHandle("ZGlobal.Com.Unit.XyTable.Subscribe.Segments.Start");
     var hEnd = adsClient.CreateVariableHandle("ZGlobal.Com.Unit.XyTable.Subscribe.Segments.End");
     
-    Console.WriteLine("Type something (press Esc to exist):");
-
     while (true)
     {
         var keyInfo = Console.ReadKey(intercept: true);
@@ -103,7 +67,7 @@ using (var canvas = new SKCanvas(bitmap))
         if (keyInfo.Key == ConsoleKey.Enter)
         {
             textWidth = 0;
-            Console.Clear();
+            Clear();
         }
 
         Console.Write(keyInfo.KeyChar.ToString());
@@ -123,33 +87,12 @@ using (var canvas = new SKCanvas(bitmap))
             SKPathVerb verb;
             while ((verb = it.Next(points)) != SKPathVerb.Done)
             {
-                if (verb == SKPathVerb.Move)
+                if (verb == SKPathVerb.Line)
                 {
-
-                }
-                else if (verb == SKPathVerb.Line)
-                {
-                    paint.Color = SKColors.Red;
-                    paint.StrokeWidth = 2;
-                    canvas.DrawPoint(points[0], SKColors.Red);
-                    canvas.DrawPoint(points[1], SKColors.Red);
-                    canvas.DrawLine(points[0], points[1], paint);
-
                     WriteSegment(adsClient, hStart, hEnd, points, verb);
                 }
                 else if (verb == SKPathVerb.Quad)
                 {
-                    canvas.DrawPoint(points[0], SKColors.Red);
-                    canvas.DrawPoint(points[1], SKColors.Green);
-                    canvas.DrawPoint(BezierPoint(points, 0.5f), SKColors.Blue);
-                    canvas.DrawPoint(points[2], SKColors.Red);
-
-                    paint.Color = SKColors.Gray;
-                    paint.StrokeWidth = 1;
-                    canvas.DrawLine(points[0], points[1], paint);
-                    canvas.DrawLine(points[2], points[1], paint);
-
-
                     var segmentPoints = new Span<SKPoint>(new SKPoint[5]);
                     segmentPoints[0] = points[0];
                     segmentPoints[1] = BezierPoint(points, 0.25f);
@@ -158,17 +101,9 @@ using (var canvas = new SKCanvas(bitmap))
                     segmentPoints[4] = points[2];
                     WriteSegment(adsClient, hStart, hEnd, segmentPoints, verb);
                 }
-                else if (verb == SKPathVerb.Cubic)
-                {
-
-                }
             }
         }
     }
 }
-
-
-
-Console.WriteLine("Fin.");
 
 
