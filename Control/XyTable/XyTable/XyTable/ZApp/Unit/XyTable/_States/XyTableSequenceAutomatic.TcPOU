@@ -71,6 +71,19 @@ REPEAT
         _otg.MaxAcceleration[1] := 10000; 
         _otg.MaxVelocity[0] := _data.Machine.Highspeed;
         _otg.MaxVelocity[1] := _data.Machine.Highspeed;
+        
+        _otg.CurrentPosition[0] := _axis.AxisX.ActualPosition;
+        _otg.CurrentPosition[1] := _axis.AxisY.ActualPosition;
+        _otg.CurrentVelocity[0] := 0;
+        _otg.CurrentVelocity[1] := 0;
+        _otg.CurrentAcceleration[0] := 0;
+        _otg.CurrentAcceleration[1] := 0;
+        _otg.TargetPosition[0] := 0; 
+        _otg.TargetPosition[1] := 0;
+        _otg.TargetVelocity[0] := 0; 
+        _otg.TargetVelocity[1] := 0;
+        _otg.TargetAcceleration[0] := 0; 
+        _otg.TargetAcceleration[1] := 0;        
       END_IF
 
       IF Halting
@@ -129,8 +142,8 @@ REPEAT
         _segments.PopFirstItem();
         
         IF _segments.Empty
-          OR_ELSE NOT ZCore.IsEqualLreal(_otg.CurrentPosition[0], _segments.ItemAt(0).Points[0].X, 0.1) 
-          OR_ELSE NOT ZCore.IsEqualLreal(_otg.CurrentPosition[1], _segments.ItemAt(0).Points[0].Y, 0.1)
+          OR_ELSE NOT ZCore.IsEqualLreal(_otg.CurrentPosition[0], _segments.ItemAt(0).Points[0].X, 1E-2) 
+          OR_ELSE NOT ZCore.IsEqualLreal(_otg.CurrentPosition[1], _segments.ItemAt(0).Points[0].Y, 1E-2)
         THEN
           _actuator.Pen.UpAsync(THIS^);
         END_IF 
@@ -179,13 +192,14 @@ REPEAT
       _otg.TargetAcceleration[1] := 0;  
       _spline.Clear();
       
-      // todo: make this more dynamic ...
+      // todo: make this more dynamic, if  segments are connected it would be possible
+      // to calculate 1 spline over two or more segments
       FOR i:=0 TO 4
       DO 
         _spline.Append(((i) / INT_TO_LREAL(4)), ADR(_segment.Points[i]));
       END_FOR
 
-      _spline.Interpolate(0,0,0,0);
+      _spline.Recalculate();
       _splineIndex := 0;
       _step.SetNext(XyTableStep.AutomaticDrawCatmulRomDrawSpline);
       
@@ -197,7 +211,7 @@ REPEAT
       THEN
         _otg.TargetPosition[0] := _splinePointBuffer[_splineIndex*2];
         _otg.TargetPosition[1] := _splinePointBuffer[_splineIndex*2+1];      
-        _otg.TargetVelocity[0] := _splineTangentBuffer[_splineIndex*2+1]; 
+        _otg.TargetVelocity[0] := _splineTangentBuffer[_splineIndex*2]; 
         _otg.TargetVelocity[1] := _splineTangentBuffer[_splineIndex*2+1]; 
       ELSIF _otg.State = Struckig.TrajectoryState.Idle
       THEN

@@ -48,11 +48,15 @@ class XYTableApp(ShowBase):
         
         self.texture = self.create_texture()        
         
+        self.accept('enter', self.clear)
         self.updateTask = taskMgr.add(self.update, "update")
 
         self.pen_positions = []
         self.setup_lights()
         self.pen_z_position = 0.5
+        
+    def clear(self):
+        self.pen_positions = [[]];
 
     def create_grid(self):
         
