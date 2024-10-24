@@ -56,7 +56,8 @@ class XYTableApp(ShowBase):
         self.pen_z_position = 0.5
         
     def clear(self):
-        self.pen_positions = [[]];
+        self.pen_positions = [[]]
+        self.draw_pen_path()
 
     def create_grid(self):
         

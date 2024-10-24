@@ -13,7 +13,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{5A5B70C5-D544-4E47-9452-D63A137AFEF2}" Name="XyTable" PrjFilePath="XyTable\XyTable.plcproj" TmcFilePath="XyTable\XyTable.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{3050107E-4A8C-A5E1-A306-3EB300DC49D8}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="XyTable\XyTable.tmc" TmcHash="{81FC6CD6-294E-211B-5119-D89A908583AE}">
 					<Name>XyTable Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
